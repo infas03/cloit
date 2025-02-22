@@ -1,7 +1,19 @@
+import { deleteMenu } from "@/redux/actions/menuActions";
+import { Trash } from "iconsax-react";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
-const MenuItem = ({ menu, setSelectedMenu, depth, isExpanded, toggleExpand }) => {
+const MenuItem = ({
+  menu,
+  setSelectedMenu,
+  depth,
+  isExpanded,
+  toggleExpand,
+}) => {
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(isExpanded);
+  const [isDelete, setIsDelete] = useState(null);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -10,6 +22,14 @@ const MenuItem = ({ menu, setSelectedMenu, depth, isExpanded, toggleExpand }) =>
   useEffect(() => {
     setIsOpen(isExpanded);
   }, [isExpanded]);
+
+  const onCancelHandle = () => {
+    setIsDelete(null);
+  };
+
+  const handleDelete = (menuId) => {
+    dispatch(deleteMenu(menuId));
+  };
 
   return (
     <div
@@ -32,9 +52,9 @@ const MenuItem = ({ menu, setSelectedMenu, depth, isExpanded, toggleExpand }) =>
               onClick={toggleOpen}
             >
               <svg
-              className={`size-4 text-gray-800 transition-transform ${
-                isOpen ? "" : "-rotate-90"
-              }`}
+                className={`size-4 text-gray-800 transition-transform ${
+                  isOpen ? "" : "-rotate-90"
+                }`}
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -52,15 +72,24 @@ const MenuItem = ({ menu, setSelectedMenu, depth, isExpanded, toggleExpand }) =>
             </button>
 
             <div className="grow hs-accordion-selectable hs-accordion-selected:bg-gray-100 px-1.5 rounded-md cursor-pointer">
-              <div className="flex items-center gap-x-3">
-                <div className="">
+              <div className="flex items-center gap-x-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedMenu({ ...menu, isUpdate: true })}
+                >
                   <span className="text-sm text-gray-800">{menu.name}</span>
-                </div>
+                </button>
                 <button
                   onClick={() => setSelectedMenu(menu)}
                   className="w-5 h-5 rounded-full bg-arctic-blue-600 text-center font-bold text-white text-xs flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 >
                   +
+                </button>
+                <button
+                  onClick={() => setIsDelete(menu)}
+                  className="w-5 h-5 rounded-full bg-red-500 text-center font-bold text-white text-xs flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                >
+                  <Trash size="12" color="#ffffff" variant="Bold" />
                 </button>
               </div>
             </div>
@@ -89,6 +118,13 @@ const MenuItem = ({ menu, setSelectedMenu, depth, isExpanded, toggleExpand }) =>
           </div>
         )}
       </div>
+
+      <DeleteConfirmationModal
+        isOpen={isDelete}
+        title={menu?.name}
+        onClose={onCancelHandle}
+        handleDelete={() => handleDelete(menu?.id)}
+      />
     </div>
   );
 };

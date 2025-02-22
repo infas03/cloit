@@ -1,24 +1,29 @@
-import { addMenu } from "@/redux/actions/menuActions";
+import { addMenu, updateMenu } from "@/redux/actions/menuActions";
 import { addMenuSchema } from "@/validations/validations";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 
-const AddMenuForm = ({ selectedMenu }) => {
+const AddMenuForm = ({ selectedMenu, setSelectedMenu }) => {
+  console.log('selectedMenu: ', selectedMenu)
   const dispatch = useDispatch();
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      menuId: selectedMenu.id ||  "",
-      name: "",
-      parentId: selectedMenu.id || "",
-      depth: selectedMenu.depth || 1,
+      id: selectedMenu?.id || '',
+      name: selectedMenu?.isUpdate ? selectedMenu?.name : '',
+      parentName: selectedMenu?.isUpdate ? selectedMenu?.parentName : selectedMenu?.name,
+      parentId: selectedMenu?.isUpdate ? selectedMenu?.parentId : selectedMenu?.id,
+      depth: selectedMenu?.isUpdate ? selectedMenu?.depth : selectedMenu?.depth,
     },
     validationSchema: addMenuSchema,
     onSubmit: async (values, { resetForm }) => {
-      
-      console.log("values: ", values);
-      dispatch(addMenu(values, resetForm))
+      if(selectedMenu?.isUpdate){
+        dispatch(updateMenu(values, resetForm, setSelectedMenu))
+      } else {
+        const { id, ...addValues } = values;
+        dispatch(addMenu(addValues, resetForm, setSelectedMenu))
+      }
     },
   });
 
@@ -32,13 +37,13 @@ const AddMenuForm = ({ selectedMenu }) => {
           <input
             type="text"
             id="parentId"
-            value={formik.values.menuId}
+            value={formik.values.id}
             onChange={formik.handleChange}
             className="border p-2 rounded-2xl w-full bg-lightGray disabled:bg-darkGray px-4 py-[14px]"
             disabled
           />
-          {formik.touched.menuId && formik.errors.menuId ? (
-            <div className="text-red-500 text-sm">{formik.errors.menuId}</div>
+          {formik.touched.parentId && formik.errors.parentId ? (
+            <div className="text-red-500 text-sm">{formik.errors.parentId}</div>
           ) : null}
         </div>
         <div className="mb-2">
@@ -64,7 +69,7 @@ const AddMenuForm = ({ selectedMenu }) => {
           <input
             type="text"
             id="parentId"
-            value={selectedMenu?.name}
+            value={formik.values.parentName}
             className="border p-2 rounded-2xl w-1/2 bg-lightGray disabled:bg-darkGray px-4 py-[14px]"
             disabled
           />
@@ -92,7 +97,7 @@ const AddMenuForm = ({ selectedMenu }) => {
           type="submit"
           className="bg-arctic-blue-600 hover:bg-arctic-blue-600/90 w-1/2 text-white px-8 py-[14px] rounded-[48px] font-bold"
         >
-          Save
+          {selectedMenu?.isUpdate ? 'Update' : 'Save'}
         </button>
       </form>
     </div>

@@ -23,7 +23,8 @@ export const fetchMenus = () => {
   };
 };
 
-export const addMenu = (inputData, resetForm) => {
+export const addMenu = (inputData, resetForm, setSelectedMenu) => {
+  console.log('addMenu input: ', inputData);
   return async (dispatch) => {
     try {
       const response = await axios.post(`${apiUrl}/api/v1/menus`, inputData);
@@ -32,10 +33,48 @@ export const addMenu = (inputData, resetForm) => {
       if (response.status === 200) {
         console.log('Menu created successfully:', response.data);
         resetForm()
+        setSelectedMenu(null)
         dispatch(fetchMenus());
       }
     } catch (error) {
       console.error('Error adding menu: ', error);
+    }
+  };
+};
+
+export const updateMenu = (inputData, resetForm, setSelectedMenu) => {
+  console.log('updateMenu input: ', inputData);
+
+  return async (dispatch) => {
+    try {
+      const response = await axios.put(`${apiUrl}/api/v1/menus/${inputData?.id}`, inputData);
+      console.log('update response: ', response);
+      
+      if (response.status === 200) {
+        console.log('Menu updated successfully:', response.data);
+        resetForm();
+        setSelectedMenu(null);
+        dispatch(fetchMenus());
+      }
+    } catch (error) {
+      console.error('Error updating menu: ', error);
+    }
+  };
+};
+
+export const deleteMenu = (menuId) => {
+  console.log('input menuId: ', menuId)
+  return async (dispatch) => {
+    try {
+      const response = await axios.delete(`${apiUrl}/api/v1/menus/${menuId}`);
+      console.log('Delete response: ', response);
+
+      if (response.status === 200) {
+        console.log('Menu deleted successfully:', response.data);
+        dispatch(fetchMenus());
+      }
+    } catch (error) {
+      console.error('Error deleting menu: ', error);
     }
   };
 };

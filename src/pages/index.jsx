@@ -19,8 +19,6 @@ export default function Home() {
 
   const menus = useSelector((state) => state.menu.menus);
 
-  console.log('selectedMenu: ', selectedMenu);
-
   return (
     <Layout>
       <div className={`items-start justify-items-center flex`}>
@@ -28,7 +26,7 @@ export default function Home() {
           <MenuTree menus={menus} setSelectedMenu={setSelectedMenu} />
         </div>
         <div className="w-1/2 p-4">
-          {selectedMenu && <AddMenuForm selectedMenu={selectedMenu}/>}
+          {selectedMenu && <AddMenuForm selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />}
         </div>
       </div>
     </Layout>
