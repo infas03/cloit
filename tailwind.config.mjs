@@ -6,15 +6,28 @@ export default {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    'node_modules/preline/dist/*.js',
   ],
   theme: {
     extend: {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        blueGray: '#101828'
+        blueGray: '#101828',
+        lightGray: '#F9FAFB',
+        darkGray: '#EAECF0',
+        blueGray2: '#475467',
+        "arctic-blue-600": "#253BFF",
+        "blue-gray-800": "#1D2939",
+        "blue-gray-300": "#D0D5DD",
+        "blue-gray-600": "#475467",
+      },
+      fontFamily: {
+        sans: ['"Jakarta Sans"', 'sans-serif'],
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('preline/plugin'),
+  ],
 };

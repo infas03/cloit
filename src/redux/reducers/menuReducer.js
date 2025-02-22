@@ -1,11 +1,14 @@
 const initialState = {
-  count: 0,
+  menus: [], 
 };
 
 const menuReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'INCREMENT':
-      return { count: state.count + 1 };
+    case 'SET_MENUS':
+      return { 
+        ...state, 
+        menus: action.payload,
+      };
     default:
       return state;
   }

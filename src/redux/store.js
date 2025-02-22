@@ -1,23 +1,32 @@
-import { applyMiddleware, compose, createStore } from "redux";
+import {
+  applyMiddleware,
+  compose,
+  legacy_createStore as createStore,
+} from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import rootReducer from "./reducers";
-import { version } from "react";
+import { thunk } from "redux-thunk";
 
 const persistConfig = {
   key: "root_cloit",
-  storage
+  storage,
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const composeEnhancers = 
-  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ 
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ 
+const composeEnhancers =
+  typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
 
-export const store = createStore(
-  persistedReducer,
-  composeEnhancers(applyMiddleware())
-);
-export const persistor = persistStore(store);
+const configureStoreAndPersist = () => {
+  let store = createStore(
+    persistedReducer,
+    composeEnhancers(applyMiddleware(thunk))
+  );
+  let persistor = persistStore(store);
+  return { store, persistor };
+};
+
+export default configureStoreAndPersist;
