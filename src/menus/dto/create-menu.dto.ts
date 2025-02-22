@@ -6,4 +6,7 @@ export class CreateMenuDto {
 
   @ApiProperty({ required: false, default: false })
   parentId?: string;
+
+  @ApiProperty({ required: false })
+  depth?: number;
 }

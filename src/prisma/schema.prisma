@@ -19,5 +19,6 @@ model Menu {
   parentId  String?
   children  Menu[]   @relation("MenuToChildren")
   parent    Menu?    @relation("MenuToChildren", fields: [parentId], references: [id])
+  depth     Int
   createdAt DateTime @default(now())
 }
