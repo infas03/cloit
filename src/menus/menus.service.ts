@@ -38,7 +38,7 @@ export class MenusService {
   }
 
   async create(createMenuDto: CreateMenuDto) {
-    const { name, parentId } = createMenuDto;
+    const { name, parentId, parentName } = createMenuDto;
 
     try {
       if (parentId) {
@@ -56,6 +56,7 @@ export class MenusService {
           data: {
             name,
             parentId,
+            parentName,
             depth: typedParentMenu.depth + 1,
           },
         });
@@ -72,17 +73,21 @@ export class MenusService {
     }
   }
 
-  async updateMenu(menuId: string, updateMenuDto: UpdateMenuDto) {
+  async updateMenu(id: string, updateMenuDto: UpdateMenuDto) {
     return this.prisma.menu.update({
-      where: { id: menuId },
+      where: { id: id },
       data: updateMenuDto,
     });
   }
 
   async deleteMenu(menuId: string) {
-    return this.prisma.menu.delete({
-      where: { id: menuId },
-    });
+    try {
+      await this.prisma.menu.delete({
+        where: { id: menuId },
+      });
+    } catch (error) {
+      throw new Error(`Error deleting menu: ${error.message}`);
+    }
   }
 
   async addMenuToParent(createMenuDto: CreateMenuDto) {

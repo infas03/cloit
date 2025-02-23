@@ -9,6 +9,11 @@ export class UpdateMenuDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
+  @IsString()
+  parentName?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsUUID()
   parentId?: string;
 }

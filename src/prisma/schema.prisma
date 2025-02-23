@@ -17,8 +17,9 @@ model Menu {
   id        String   @id @default(uuid()) 
   name      String
   parentId  String?
+  parentName String?
   children  Menu[]   @relation("MenuToChildren")
-  parent    Menu?    @relation("MenuToChildren", fields: [parentId], references: [id])
+  parent    Menu?    @relation("MenuToChildren", fields: [parentId], references: [id], onDelete: Cascade)
   depth     Int
   createdAt DateTime @default(now())
 }
