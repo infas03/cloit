@@ -19,8 +19,10 @@ export default {
         blueGray2: '#475467',
         "arctic-blue-600": "#253BFF",
         "blue-gray-800": "#1D2939",
+        "blue-gray-900": "#101828",
         "blue-gray-300": "#D0D5DD",
         "blue-gray-600": "#475467",
+        "lime-green-400": "#9FF443",
       },
       fontFamily: {
         sans: ['"Jakarta Sans"', 'sans-serif'],
