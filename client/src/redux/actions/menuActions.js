@@ -23,7 +23,7 @@ export const fetchMenus = () => {
   };
 };
 
-export const addMenu = (inputData, resetForm, setSelectedMenu) => {
+export const addMenu = (inputData, resetForm, setSelectedMenu, setLoading) => {
   console.log('addMenu input: ', inputData);
   return async (dispatch) => {
     try {
@@ -32,6 +32,7 @@ export const addMenu = (inputData, resetForm, setSelectedMenu) => {
       
       if (response.status === 200) {
         console.log('Menu created successfully:', response.data);
+        setLoading(false)
         resetForm()
         setSelectedMenu(null)
         dispatch(fetchMenus());
@@ -42,7 +43,7 @@ export const addMenu = (inputData, resetForm, setSelectedMenu) => {
   };
 };
 
-export const updateMenu = (inputData, resetForm, setSelectedMenu) => {
+export const updateMenu = (inputData, resetForm, setSelectedMenu, setLoading) => {
   console.log('updateMenu input: ', inputData);
 
   return async (dispatch) => {
@@ -52,6 +53,7 @@ export const updateMenu = (inputData, resetForm, setSelectedMenu) => {
       
       if (response.status === 200) {
         console.log('Menu updated successfully:', response.data);
+        setLoading(false);
         resetForm();
         setSelectedMenu(null);
         dispatch(fetchMenus());

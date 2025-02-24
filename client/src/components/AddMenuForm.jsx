@@ -1,28 +1,36 @@
 import { addMenu, updateMenu } from "@/redux/actions/menuActions";
 import { addMenuSchema } from "@/validations/validations";
 import { useFormik } from "formik";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
+import Spinner from "./Spinner";
 
 const AddMenuForm = ({ selectedMenu, setSelectedMenu }) => {
-  console.log('selectedMenu: ', selectedMenu)
+  console.log("selectedMenu: ", selectedMenu);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      id: selectedMenu?.id || '',
-      name: selectedMenu?.isUpdate ? selectedMenu?.name : '',
-      parentName: selectedMenu?.isUpdate ? selectedMenu?.parentName : selectedMenu?.name,
-      parentId: selectedMenu?.isUpdate ? selectedMenu?.parentId : selectedMenu?.id,
+      id: selectedMenu?.id || "",
+      name: selectedMenu?.isUpdate ? selectedMenu?.name : "",
+      parentName: selectedMenu?.isUpdate
+        ? selectedMenu?.parentName
+        : selectedMenu?.name,
+      parentId: selectedMenu?.isUpdate
+        ? selectedMenu?.parentId
+        : selectedMenu?.id,
       depth: selectedMenu?.isUpdate ? selectedMenu?.depth : selectedMenu?.depth,
     },
     validationSchema: addMenuSchema,
     onSubmit: async (values, { resetForm }) => {
-      if(selectedMenu?.isUpdate){
-        dispatch(updateMenu(values, resetForm, setSelectedMenu))
+      setLoading(true);
+      if (selectedMenu?.isUpdate) {
+        dispatch(updateMenu(values, resetForm, setSelectedMenu, setLoading));
       } else {
         const { id, ...addValues } = values;
-        dispatch(addMenu(addValues, resetForm, setSelectedMenu))
+        dispatch(addMenu(addValues, resetForm, setSelectedMenu, setLoading));
       }
     },
   });
@@ -95,9 +103,10 @@ const AddMenuForm = ({ selectedMenu, setSelectedMenu }) => {
 
         <button
           type="submit"
-          className="bg-arctic-blue-600 hover:bg-arctic-blue-600/90 w-1/2 text-white px-8 py-[14px] rounded-[48px] font-bold"
+          disabled={loading}
+          className="bg-arctic-blue-600 hover:bg-arctic-blue-600/90 disabled:bg-gray-500 w-1/2 text-white px-8 py-[14px] rounded-[48px] font-bold"
         >
-          {selectedMenu?.isUpdate ? 'Update' : 'Save'}
+          {loading ? <Spinner /> : selectedMenu?.isUpdate ? "Update" : "Save"}
         </button>
       </form>
     </div>

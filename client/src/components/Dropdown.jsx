@@ -34,7 +34,7 @@ const Dropdown = ({
   };
 
   const handleLoadOptions = (inputValue, callback) => {
-    const filteredOptions = options.filter((option) => option.label.toLowerCase().includes(inputValue.toLowerCase()));
+    const filteredOptions = options?.filter((option) => option?.label?.toLowerCase().includes(inputValue?.toLowerCase()));
     callback(filteredOptions);
   };
 
