@@ -32,12 +32,13 @@ export const addMenu = (inputData, resetForm, setSelectedMenu, setLoading) => {
       
       if (response.status === 200) {
         console.log('Menu created successfully:', response.data);
+        await dispatch(fetchMenus());
         setLoading(false)
         resetForm()
         setSelectedMenu(null)
-        dispatch(fetchMenus());
       }
     } catch (error) {
+      setLoading(false)
       console.error('Error adding menu: ', error);
     }
   };
@@ -53,18 +54,19 @@ export const updateMenu = (inputData, resetForm, setSelectedMenu, setLoading) =>
       
       if (response.status === 200) {
         console.log('Menu updated successfully:', response.data);
+        await dispatch(fetchMenus());
         setLoading(false);
         resetForm();
         setSelectedMenu(null);
-        dispatch(fetchMenus());
       }
     } catch (error) {
+      setLoading(false)
       console.error('Error updating menu: ', error);
     }
   };
 };
 
-export const deleteMenu = (menuId) => {
+export const deleteMenu = (menuId, setLoading, setIsDelete) => {
   console.log('input menuId: ', menuId)
   return async (dispatch) => {
     try {
@@ -73,9 +75,12 @@ export const deleteMenu = (menuId) => {
 
       if (response.status === 200) {
         console.log('Menu deleted successfully:', response.data);
-        dispatch(fetchMenus());
+        await dispatch(fetchMenus());
+        setIsDelete(null);
+        setLoading(false)
       }
     } catch (error) {
+      setLoading(false)
       console.error('Error deleting menu: ', error);
     }
   };

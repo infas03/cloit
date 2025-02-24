@@ -1,6 +1,7 @@
 import React from 'react';
+import Spinner from './Spinner';
 
-const DeleteConfirmationModal = ({ isOpen, onClose, title, handleDelete }) => {
+const DeleteConfirmationModal = ({ isOpen, onClose, title, handleDelete, loading }) => {
   if (!isOpen) return null;
 
   return (
@@ -20,9 +21,10 @@ const DeleteConfirmationModal = ({ isOpen, onClose, title, handleDelete }) => {
             <button
               type="button"
               onClick={() => handleDelete()}
-              className="bg-blue-700 hover:bg-blue-700/90 text-white text-sm font-bold h-12 px-6 rounded-xl"
+              disabled={loading}
+              className="bg-blue-700 hover:bg-blue-700/90 disabled:bg-gray-500 text-white text-sm font-bold h-12 min-w-32 px-6 rounded-xl"
             >
-              Delete <span className="capitalize">{title}</span>
+              {loading ? <Spinner /> :  <span>Delete <span className="capitalize">{title}</span></span>}
             </button>
           </div>
         </div>

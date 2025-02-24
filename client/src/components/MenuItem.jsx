@@ -14,6 +14,7 @@ const MenuItem = ({
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(isExpanded);
   const [isDelete, setIsDelete] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -28,7 +29,8 @@ const MenuItem = ({
   };
 
   const handleDelete = (menuId) => {
-    dispatch(deleteMenu(menuId));
+    setLoading(true);
+    dispatch(deleteMenu(menuId, setLoading, setIsDelete));
   };
 
   return (
@@ -123,6 +125,7 @@ const MenuItem = ({
         isOpen={isDelete}
         title={menu?.name}
         onClose={onCancelHandle}
+        loading={loading}
         handleDelete={() => handleDelete(menu?.id)}
       />
     </div>
